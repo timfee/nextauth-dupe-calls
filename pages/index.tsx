@@ -1,18 +1,19 @@
-import type { NextPage } from 'next'
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
-import { useSession, signIn, signOut } from 'next-auth/react'
+import type { GetServerSideProps, NextPage } from "next";
+import Head from "next/head";
+import Image from "next/image";
+import styles from "../styles/Home.module.css";
+import { useSession, signIn, signOut, getSession } from "next-auth/react";
 
 const Home: NextPage = () => {
-  const { data, status } = useSession()
+  const { data, status } = useSession();
+  //const status = 'broken'
   return (
     <>
       <div>
-        {status === 'unauthenticated' && (
-          <button onClick={() => signIn('google')}>sign in</button>
+        {status === "unauthenticated" && (
+          <button onClick={() => signIn("google")}>sign in</button>
         )}
-        {status === 'authenticated' && (
+        {status === "authenticated" && (
           <div>
             you are <span>{data.user?.name}</span> |&nbsp;
             <button onClick={() => signOut()}>sign out</button>
@@ -20,8 +21,15 @@ const Home: NextPage = () => {
         )}
       </div>
     </>
-  )
+  );
+};
 
-}
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  return {
+    props: {
+      session: await getSession(ctx),
+    },
+  };
+};
 
-export default Home
+export default Home;
