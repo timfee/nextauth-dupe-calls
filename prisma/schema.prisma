@@ -25,26 +25,6 @@ model Account {
   @@unique([provider, providerAccountId])
 }
 
-model Org {
-  id         String       @id
-  slug       String       @unique
-  name       String
-  status     orgStatus    @default(ACTIVE)
-  orgUser    OrgUser[]
-  Invitation Invitation[]
-}
-
-model OrgUser {
-  userId      String
-  orgId       String
-  role        OrgRole
-  dateCreated DateTime @default(now())
-  Org         Org      @relation(fields: [orgId], references: [id])
-  user        User     @relation(fields: [userId], references: [id])
-
-  @@unique([userId, orgId])
-}
-
 model Session {
   id           String   @id @default(cuid())
   sessionToken String   @unique
@@ -60,9 +40,8 @@ model User {
   emailVerified DateTime?
   image         String?
   account       Account?
-  orgUser       OrgUser[]
   session       Session[]
-  Invitation    Invitation[]
+
 }
 
 model VerificationToken {
@@ -71,36 +50,4 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
-}
-
-model Invitation {
-  id        String           @id @default(cuid())
-  org       Org              @relation(fields: [orgId], references: [id])
-  invitedBy User             @relation(fields: [invitedByUserId], references: [id])
-  email     String
-  invitedOn DateTime         @default(now())
-  status    invitationStatus @default(PENDING)
-  role      OrgRole          @default(USER)
-  message   String
-
-  orgId           String
-  invitedByUserId String
-}
-
-enum OrgRole {
-  USER
-  MANAGER
-  ADMIN
-}
-
-enum orgStatus {
-  ACTIVE
-  INACTIVE
-  DELETED
-}
-
-enum invitationStatus {
-  PENDING
-  ACCEPTED
-  DECLINED
 }

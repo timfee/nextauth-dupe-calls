@@ -8,7 +8,7 @@ import { authOptions } from "./api/auth/[...nextauth]";
 
 const Home: NextPage = () => {
   const { data, status } = useSession();
-  //const status = 'broken'
+  // const status = 'broken'
   return (
     <>
       <div>
