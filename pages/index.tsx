@@ -1,14 +1,12 @@
 import type { GetServerSideProps, NextPage } from "next";
-import Head from "next/head";
-import Image from "next/image";
-import styles from "../styles/Home.module.css";
 import { useSession, signIn, signOut, getSession } from "next-auth/react";
 import { getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
 
 const Home: NextPage = () => {
-  const { data, status } = useSession();
-  // const status = 'broken'
+  // eliminating this call just to get bare minimum repro.
+  // const { data, status } = useSession();
+  const status = 'broken'
   return (
     <>
       <div>
@@ -29,8 +27,11 @@ const Home: NextPage = () => {
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   return {
     props: {
-      session: await getSession(ctx),
-      //session: await getServerSession(ctx, authOptions),
+      // session: await getSession(ctx),
+
+      //
+      // eliminating this call just to get bare minimum repro.
+      // session: await getServerSession(ctx, authOptions),
     },
   };
 };
