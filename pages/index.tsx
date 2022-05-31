@@ -6,11 +6,12 @@ import { authOptions } from "./api/auth/[...nextauth]";
 const Home: NextPage = () => {
   // eliminating this call just to get bare minimum repro.
   // const { data, status } = useSession();
-  const status = 'broken'
+  const status = "broken";
   return (
     <>
+      <p>Howdy</p>
       <div>
-        {status === "unauthenticated" && (
+        {status !== "authenticated" && (
           <button onClick={() => signIn("google")}>sign in</button>
         )}
         {status === "authenticated" && (
@@ -29,9 +30,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     props: {
       // session: await getSession(ctx),
 
-      //
-      // eliminating this call just to get bare minimum repro.
-      // session: await getServerSession(ctx, authOptions),
+      session: await getServerSession(ctx, authOptions),
     },
   };
 };
